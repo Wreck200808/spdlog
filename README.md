@@ -8,7 +8,57 @@
 
 Fast C++ logging library
 
-
+## Architecture Improvement 
+Redesigned the logging pipeline by assigning each thread an independent ring buffer(SPSC queue), enabling background process to poll multiple buffers for output. This change minimized contention,
+enabled lock-free logging, and achieved 2× throughput compared to the original global ring buffer design. 
+#### Original Version
+```
+[info] -------------------------------------------------
+[info] Messages     : 1000000
+[info] Threads      : 8
+[info] Queue        : 8192 slots
+[info] Queue memory : 8192 x 408 = 3264 KB 
+[info] Total iters  : 3
+[info] -------------------------------------------------
+[info] 
+[info] *********************************
+[info] Queue Overflow Policy: block
+[info] *********************************
+[info] Elapsed: 2.139614791 secs         467373/sec
+[info] Elapsed: 2.148955208 secs         465342/sec
+[info] Elapsed: 2.147029375 secs         465759/sec
+[info] 
+[info] *********************************
+[info] Queue Overflow Policy: overrun
+[info] *********************************
+[info] Elapsed: 0.929272167 secs         1076110/sec
+[info] Elapsed: 0.923259875 secs         1083118/sec
+[info] Elapsed: 0.897922958 secs         1113681/sec
+```
+#### Improved version
+```
+[info] -------------------------------------------------
+[info] Messages     : 1000000
+[info] Threads      : 8
+[info] Queue        : 8192 slots
+[info] Queue memory : 8192 x 408 = 3264 KB 
+[info] Total iters  : 3
+[info] -------------------------------------------------
+[info] 
+[info] *********************************
+[info] Queue Overflow Policy: block
+[info] *********************************
+[info] Elapsed: 1.078677375 secs         927061/sec
+[info] Elapsed: 1.093952459 secs         914116/sec
+[info] Elapsed: 1.069980292 secs         934596/sec
+[info] 
+[info] *********************************
+[info] Queue Overflow Policy: overrun
+[info] *********************************
+[info] Elapsed: 0.88688825 secs  1127537/sec
+[info] Elapsed: 0.872893208 secs         1145615/sec
+[info] Elapsed: 0.876904667 secs         1140374/sec
+```
 ## Install
 #### Header-only version
 Copy the include [folder](https://github.com/gabime/spdlog/tree/v1.x/include/spdlog) to your build tree and use a C++11 compiler.
