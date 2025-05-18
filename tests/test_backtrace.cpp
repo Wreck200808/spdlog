@@ -47,7 +47,7 @@ TEST_CASE("bactrace-async", "[bactrace]") {
 
     size_t backtrace_size = 5;
 
-    spdlog::init_thread_pool(120, 1);
+    spdlog::init_thread_pool(128, 1);
     auto logger = std::make_shared<spdlog::async_logger>("test-bactrace-async", test_sink,
                                                          spdlog::thread_pool());
     logger->set_pattern("%v");

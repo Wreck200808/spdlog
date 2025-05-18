@@ -69,10 +69,10 @@ option(SPDLOG_BUILD_EXAMPLE_HO "Build header only example" OFF)
 
 # testing options
 option(SPDLOG_BUILD_TESTS "Build tests" OFF)
-option(SPDLOG_BUILD_TESTS_HO "Build tests using the header only version" OFF)
+option(SPDLOG_BUILD_TESTS_HO "Build tests using the header only version" ON)
 
 # bench options
-option(SPDLOG_BUILD_BENCH "Build benchmarks (Requires https://github.com/google/benchmark.git to be installed)" OFF)
+option(SPDLOG_BUILD_BENCH "Build benchmarks (Requires https://github.com/google/benchmark.git to be installed)" ON)
 
 # sanitizer options
 option(SPDLOG_SANITIZE_ADDRESS "Enable address sanitizer in tests" OFF)
@@ -149,6 +149,7 @@ if (SPDLOG_BUILD_PIC)
 endif ()
 
 find_package(Threads REQUIRED)
+find_package(Boost CONFIG REQUIRED)
 message(STATUS "Build type: " ${CMAKE_BUILD_TYPE})
 # ---------------------------------------------------------------------------------------
 # Static/Shared library

@@ -6,6 +6,7 @@
 #include <spdlog/details/log_msg_buffer.h>
 #include <spdlog/details/mpmc_blocking_q.h>
 #include <spdlog/details/os.h>
+#include <spdlog/details/queue_manager.h>
 
 #include <chrono>
 #include <functional>
@@ -70,7 +71,8 @@ struct async_msg : log_msg_buffer {
 class SPDLOG_API thread_pool {
 public:
     using item_type = async_msg;
-    using q_type = details::mpmc_blocking_queue<item_type>;
+    // using q_type = details::mpmc_blocking_queue<item_type>;
+    using q_type = details::queue_manager<item_type>;
 
     thread_pool(size_t q_max_items,
                 size_t threads_n,

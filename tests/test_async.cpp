@@ -107,7 +107,7 @@ TEST_CASE("async periodic flush", "[async]") {
 TEST_CASE("tp->wait_empty() ", "[async]") {
     auto test_sink = std::make_shared<spdlog::sinks::test_sink_mt>();
     test_sink->set_delay(std::chrono::milliseconds(5));
-    size_t messages = 100;
+    size_t messages = 128;
 
     auto tp = std::make_shared<spdlog::details::thread_pool>(messages, 2);
     auto logger = std::make_shared<spdlog::async_logger>("as", test_sink, tp,
@@ -175,7 +175,7 @@ TEST_CASE("to_file", "[async]") {
 
 TEST_CASE("to_file multi-workers", "[async]") {
     prepare_logdir();
-    size_t messages = 1024 * 10;
+    size_t messages = 1024 * 16;
     size_t tp_threads = 10;
     spdlog::filename_t filename = SPDLOG_FILENAME_T(TEST_FILENAME);
     {
